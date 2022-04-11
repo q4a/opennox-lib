@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/go-gl/gl/v3.3-core/gl"
+	"github.com/go-gl/gl/v3.2-core/gl"
 	"github.com/veandco/go-sdl2/sdl"
 
 	"github.com/noxworld-dev/opennox-lib/client/seat"
@@ -33,7 +33,7 @@ func New(title string, sz image.Point) (*Window, error) {
 	if err := sdl.GLSetAttribute(sdl.GL_CONTEXT_MAJOR_VERSION, 3); err != nil {
 		return nil, fmt.Errorf("cannot set OpenGL version: %w", err)
 	}
-	if err := sdl.GLSetAttribute(sdl.GL_CONTEXT_MINOR_VERSION, 3); err != nil {
+	if err := sdl.GLSetAttribute(sdl.GL_CONTEXT_MINOR_VERSION, 2); err != nil {
 		return nil, fmt.Errorf("cannot set OpenGL version: %w", err)
 	}
 	if err := sdl.GLSetAttribute(sdl.GL_CONTEXT_PROFILE_CORE, 1); err != nil {
@@ -308,7 +308,7 @@ func (win *Window) compileShader(typ uint32, src string) (uint32, error) {
 }
 
 func (win *Window) initProgram() error {
-	const glVertShader = `#version 150 core
+	const glVertShader = `#version 140
 in vec2 position;
 in vec2 texcoord;
 
@@ -321,7 +321,7 @@ void main()
 }
 ` + "\x00"
 
-	const glFragShader = `#version 150 core
+	const glFragShader = `#version 140
 uniform sampler2D tex;
 in vec2 Texcoord;
 
