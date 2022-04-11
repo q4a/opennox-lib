@@ -30,14 +30,11 @@ func New(title string, sz image.Point) (*Window, error) {
 		return nil, fmt.Errorf("SDL Initialization failed: %w", err)
 	}
 	sdl.SetHint(sdl.HINT_RENDER_SCALE_QUALITY, "1")
-	if err := sdl.GLSetAttribute(sdl.GL_CONTEXT_MAJOR_VERSION, 3); err != nil {
+	if err := sdl.GLSetAttribute(sdl.GL_CONTEXT_MAJOR_VERSION, 2); err != nil {
 		return nil, fmt.Errorf("cannot set OpenGL version: %w", err)
 	}
-	if err := sdl.GLSetAttribute(sdl.GL_CONTEXT_MINOR_VERSION, 3); err != nil {
+	if err := sdl.GLSetAttribute(sdl.GL_CONTEXT_MINOR_VERSION, 1); err != nil {
 		return nil, fmt.Errorf("cannot set OpenGL version: %w", err)
-	}
-	if err := sdl.GLSetAttribute(sdl.GL_CONTEXT_PROFILE_CORE, 1); err != nil {
-		return nil, fmt.Errorf("cannot set OpenGL core: %w", err)
 	}
 	if err := sdl.GLSetAttribute(sdl.GL_CONTEXT_FORWARD_COMPATIBLE_FLAG, 1); err != nil {
 		return nil, fmt.Errorf("cannot set OpenGL forward: %w", err)
@@ -308,11 +305,11 @@ func (win *Window) compileShader(typ uint32, src string) (uint32, error) {
 }
 
 func (win *Window) initProgram() error {
-	const glVertShader = `#version 150 core
-in vec2 position;
-in vec2 texcoord;
+	const glVertShader = `#version 120
+attribute vec2 position;
+attribute vec2 texcoord;
 
-out vec2 Texcoord;
+varying vec2 Texcoord;
 
 void main()
 {
@@ -321,11 +318,11 @@ void main()
 }
 ` + "\x00"
 
-	const glFragShader = `#version 150 core
+	const glFragShader = `#version 120
 uniform sampler2D tex;
-in vec2 Texcoord;
+attribute vec2 Texcoord;
 
-out vec4 outColor;
+varying vec4 outColor;
 
 void main()
 {
