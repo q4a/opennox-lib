@@ -320,13 +320,11 @@ void main()
 
 	const glFragShader = `#version 120
 uniform sampler2D tex;
-attribute vec2 Texcoord;
-
-varying vec4 outColor;
+varying vec2 Texcoord;
 
 void main()
 {
-    outColor = texture(tex, Texcoord);
+    gl_FragData[0] = texture2D(tex, Texcoord);
 }
 ` + "\x00"
 
@@ -336,7 +334,7 @@ void main()
 	}
 	frag, err := win.compileShader(gl.FRAGMENT_SHADER, glFragShader)
 	if err != nil {
-		return fmt.Errorf("cannot compile vertex shader: %w", err)
+		return fmt.Errorf("cannot compile fragment shader: %w", err)
 	}
 
 	prog := gl.CreateProgram()
